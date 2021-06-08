@@ -29,13 +29,23 @@ namespace FutureValue
             decimal monthlyInvestment = 0;
 
             try
-            {  
-                if (isValidData())
-                {
-                    monthlyInvestment = Convert.ToDecimal(txtMonthlyInvestment.Text);
-                    yearlyInterestRate = Convert.ToDecimal(txtInterestRate.Text);
-                    years = Convert.ToInt32(txtYears.Text);
-                }
+            {
+                monthlyInvestment = Convert.ToDecimal(txtMonthlyInvestment.Text);
+                yearlyInterestRate = Convert.ToDecimal(txtInterestRate.Text);
+                years = Convert.ToInt32(txtYears.Text);
+
+                int months = years * 12;
+                decimal monthlyInterestRate = yearlyInterestRate / 12 / 100;
+                decimal futureValue = this.CalculateFutureValue(
+                    monthlyInvestment, monthlyInterestRate, months);
+                txtFutureValue.Text = futureValue.ToString("c");
+                txtMonthlyInvestment.Focus();
+
+                //STEP 7
+                //if (isValidData())
+                //{
+                //  
+                //}
             }
             catch (FormatException)  //a specific exception
             {       //this error's message box w/ error type
@@ -44,21 +54,104 @@ namespace FutureValue
 
             catch (OverflowException)   //another specific exception
             {       //this error's message box w/ error type
-                MessageBox.Show("an overflow exception has occured. please enter smaller values", "overflow error");
+                MessageBox.Show("an overflow exception has occured. Please enter smaller values", "overflow error");
             }
             catch (Exception ex)    //other exceptions
             {
                 MessageBox.Show(ex.Message + ex.GetType().ToString() + ex.StackTrace, "Error");
             }
-            int months = years * 12;
-            decimal monthlyInterestRate = yearlyInterestRate / 12 / 100;
-            decimal futureValue = this.CalculateFutureValue(
-                monthlyInvestment, monthlyInterestRate, months);
-            txtFutureValue.Text = futureValue.ToString("c");
-            txtMonthlyInvestment.Focus();
+            //int months = years * 12;
+            //decimal monthlyInterestRate = yearlyInterestRate / 12 / 100;
+            //decimal futureValue = this.CalculateFutureValue(
+            //    monthlyInvestment, monthlyInterestRate, months);
+            //txtFutureValue.Text = futureValue.ToString("c");
+            //txtMonthlyInvestment.Focus();
 
         }
 
+
+        //STEP 6: isvaliddata method calls 3 generic methods. Each text box--test for 2 types of invalid data: format & range.
+
+        public bool isValidData()
+        {
+            return
+                isPresent(txtMonthlyInvestment, "Monthly investment") &&
+                isPresent(txtInterestRate, "Yearly interest rate") &&
+                isPresent(txtYears, "Number of years");
+        }
+        //This isn't in the instructions?
+        /*Verify that fields aren't empty*/
+        public bool isPresent(TextBox textBox, string name)
+        {
+            if (textBox.Text == "")
+            {
+                MessageBox.Show(name + " is a required field.", "Entry Error");
+                textBox.Focus();
+                return false;
+            }
+            return true;
+        }
+
+        //STEP 5: 3 generic valid methods decimal, int32, withinrange
+        //fill in code from textbook
+        /* ensure values are decimals*/
+        private string isDecimal(string value, string name)
+        {
+            string msg = "";
+            if (!Decimal.TryParse(value, out _))
+            {
+                msg += name + " must be a vaild decimal value.\n";
+            }
+            return msg;
+        }
+
+        /* ensure values are integers*/
+        private string IsInt32(string value, string name)
+        {
+            string msg = "";
+            if (!Int32.TryParse(value, out _))
+            {
+                msg += name + " must be a vaild integer value.\n";
+            }
+            return msg;
+        }
+
+        /* ensure values are in range*/
+        private string IsWithinRange(string value, string name, decimal min, decimal max)
+        {
+            string msg = "";
+            if (Decimal.TryParse(value, out decimal number))
+            {
+                if (number < min || number > max)
+                    msg += name + " must be between " + min + " and " + max + ".\n";
+
+            }
+            return msg;
+        }
+
+        //public bool IsInt32(TextBox textBox, string name)
+        //{
+        //    /*fill in code from textbook*/
+
+
+
+        //    return true;
+        //}
+
+        //public bool IsWithinRange(TextBox textBox, string name, )
+        //{
+        //    /*fill in code from textbook*/
+        //    if ))
+        //    {
+        //        MessageBox.Show(name + " must be a valid decimal value.");
+        //        textBox.Focus();
+        //        return false;
+        //    }
+        //    return true;
+        //}
+
+
+        //note to self: done with this section
         private decimal CalculateFutureValue(decimal monthlyInvestment,
             decimal monthlyInterestRate, int months)
         {
@@ -75,58 +168,6 @@ namespace FutureValue
             }
             return futureValue;
         }
-
-        public bool isValidData()
-        {
-            return
-                isPresent(txtMonthlyInvestment, "Monthly investment") &&
-                isPresent(txtInterestRate, "Yearly interest rate") &&
-                isPresent(txtYears, "Number of years");
-        }
-
-        public bool isPresent(TextBox textBox, string name)
-        {
-            if (textBox.Text == "")
-            {
-                MessageBox.Show(name + " is a required field.", "Entry Error");
-                textBox.Focus();
-                return false;
-            }
-            return true;
-        }
-
-        public bool isDecimal(string value, string name)
-        {
-            /*fill in code from textbook*/
-            string msg = "";
-            if (!Decimal.TryParse(value, out _))
-            {
-                msg += name + " must be a vaild decimal value.";
-                return false;
-            }
-            return true;
-        }
-
-        //public bool IsInt32(TextBox textBox, string name)
-        //{
-        //    /*fill in code from textbook*/
-
-
-
-        //    return true;
-        //}
-
-        //public bool (TextBox textBox, string name)
-        //{
-        //    /*fill in code from textbook*/
-        //    if ))
-        //    {
-        //        MessageBox.Show(name + " must be a valid decimal value.");
-        //        textBox.Focus();
-        //        return false;
-        //    }
-        //    return true;
-        //}
 
         private void btnExit_Click(object sender, EventArgs e)
         {
