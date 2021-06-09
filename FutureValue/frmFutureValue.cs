@@ -26,6 +26,7 @@ namespace FutureValue
         {
             try
             {   //STEP 7: use IsValidData() method
+                //Wendy! You did a great job!
                 if (IsValidData())
                 {
                     decimal monthlyInvestment = Convert.ToDecimal(txtMonthlyInvestment.Text);
