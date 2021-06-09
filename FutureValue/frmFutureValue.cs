@@ -62,53 +62,47 @@ namespace FutureValue
         private bool IsValidData()
         {
             bool success = true;
-                string errorMessage = "";
+            string errorMessage = "";
 
+            errorMessage += IsPresent(txtMonthlyInvestment.Text, txtMonthlyInvestment.Tag.ToString());
             errorMessage += IsDecimal(txtMonthlyInvestment.Text, txtMonthlyInvestment.Tag.ToString());
             errorMessage += IsWithinRange(txtMonthlyInvestment.Text, txtMonthlyInvestment.Tag.ToString(), 1, 1000);
 
+            errorMessage += IsPresent(txtInterestRate.Text, txtInterestRate.Tag.ToString());
             errorMessage += IsDecimal(txtInterestRate.Text, txtInterestRate.Tag.ToString());
             errorMessage += IsWithinRange(txtInterestRate.Text, txtInterestRate.Tag.ToString(), 1, 20);
 
+            errorMessage += IsPresent(txtYears.Text, txtYears.Tag.ToString());
             errorMessage += IsInt32(txtYears.Text, txtYears.Tag.ToString());
             errorMessage += IsWithinRange(txtYears.Text, txtYears.Tag.ToString(), 1, 40);
 
             if (errorMessage != "")
             {
                 success = false;
-                MessageBox.Show(errorMessage, "YIPPEEE! Entry Error");
+                MessageBox.Show(errorMessage, "Entry Error");
             }
             return success;
         }
 
-        //CODING FROM VIDEO WITH PROFESSOR HUITSING--differs from book
-        //public bool isValidData()
-        //{
-        //    return
-        //        isPresent(txtMonthlyInvestment, "Monthly investment") &&
-        //        isPresent(txtInterestRate, "Yearly interest rate") &&
-        //        isPresent(txtYears, "Number of years");
-        //}
-        ////This isn't in the instructions?
-        ///*Verify that fields aren't empty*/
-        //public bool isPresent(TextBox textBox, string name)
-        //{
-        //    if (textBox.Text == "")
-        //    {
-        //        MessageBox.Show(name + " is a required field.", "Entry Error");
-        //        textBox.Focus();
-        //        return false;
-        //    }
-        //    return true;
-        //}
+        //this isn't in the instructions?
+        /*verify that fields aren't empty*/
+        private string IsPresent(string value, string name)
+        {
+            string msg = "";
+            if (value == "")
+            {
+                msg = name + " is a required field.\n";
+            }
+            return msg;
+        }
 
         //STEP 5: 3 generic valid methods decimal, int32, withinrange
         //fill in code from textbook
         /* ensure values are decimals*/
         private string IsDecimal(string value, string name)
-        {
+        {      //declaring variable for message
             string msg = "";
-            if (!Decimal.TryParse(value, out _))
+            if (!Decimal.TryParse(value, out decimal number))
             {
                 msg += name + " must be a vaild decimal value.\n";
             }
@@ -119,7 +113,7 @@ namespace FutureValue
         private string IsInt32(string value, string name)
         {
             string msg = "";
-            if (!Int32.TryParse(value, out _))
+            if (!Int32.TryParse(value, out int number))
             {
                 msg += name + " must be a vaild integer value.\n";
             }
